@@ -3,6 +3,9 @@ import HomePage from './pages/HomePage';
 import BubbleSort from './pages/BubbleSort';
 
 export default function App() {
+
+  console.log('App component is rendering');
+  
   return (
     <div>
       <Routes>
