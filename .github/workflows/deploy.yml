@@ -1,6 +1,7 @@
 name: Deploy Algorithm Visualizer to Github Pages
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
