@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRightLeft } from 'lucide-react';
 
 export default function HomePage() {
+  console.log('HomePage is rendering');
   const navigate = useNavigate();
 
   return (
