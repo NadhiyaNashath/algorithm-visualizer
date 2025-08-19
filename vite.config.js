@@ -9,4 +9,9 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  base: "/algorithm-visualizer/",
+  server: {
+    opne: true,
+    port: 3003
+  }
 })
