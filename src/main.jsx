@@ -6,7 +6,7 @@ import './index.css';
 console.log('Main.jsx is running');
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename="/">
+  <BrowserRouter basename="/algorithm-visualizer">
     <App />
   </BrowserRouter>
 );
