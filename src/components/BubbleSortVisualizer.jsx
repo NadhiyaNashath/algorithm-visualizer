@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, SkipBack, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { Play, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 
 // Bubble sort steps generator
 function getBubbleSortSteps(arr) {
@@ -74,39 +74,20 @@ export default function BubbleSortVisualizer() {
   const [array, setArray] = useState(null);
   const [steps, setSteps] = useState([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const intervalRef = useRef(null);
+  const [sortingStarted, setSortingStarted] = useState(false);
 
   // Generate steps whenever array changes
   useEffect(() => {
     if (array && array.length > 0) {
       setSteps(getBubbleSortSteps(array));
       setCurrentStepIndex(0);
-      setIsPlaying(false);
+      setSortingStarted(false);
     } else {
       setSteps([]);
       setCurrentStepIndex(0);
-      setIsPlaying(false);
+      setSortingStarted(false);
     }
   }, [array]);
-
-  useEffect(() => {
-    if (isPlaying && steps.length > 0) {
-      intervalRef.current = setInterval(() => {
-        setCurrentStepIndex((idx) => {
-          if (idx < steps.length - 1) return idx + 1;
-          else {
-            setIsPlaying(false);
-            return idx;
-          }
-        });
-      }, 1300);
-    } else {
-      clearInterval(intervalRef.current);
-    }
-
-    return () => clearInterval(intervalRef.current);
-  }, [isPlaying, steps.length]);
 
   const handleSubmit = (e) => {
     e?.preventDefault();
@@ -127,6 +108,28 @@ export default function BubbleSortVisualizer() {
     } else {
       alert('Please enter a valid comma-separated list of numbers');
     }
+  };
+
+  const handleStartSort = () => {
+    setSortingStarted(true);
+    setCurrentStepIndex(1); // Move to first step of sorting
+  };
+
+  const handleNext = () => {
+    if (currentStepIndex < steps.length - 1) {
+      setCurrentStepIndex(currentStepIndex + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1);
+    }
+  };
+
+  const handleReset = () => {
+    setCurrentStepIndex(0);
+    setSortingStarted(false);
   };
 
   const getBarColor = (index) => {
@@ -264,40 +267,49 @@ export default function BubbleSortVisualizer() {
                 <span className="text-green-200">Sorted</span>
               </div>
             </div>
-            <div className='p-4 items-center justify-center flex text-white text-xl font-semibold'>Click the play button to begin sorting</div>
+
+            {/* Instructions */}
+            <div className='p-4 items-center justify-center flex text-white text-xl font-semibold'>
+              {!sortingStarted ? 
+                "Click 'Start Sort' to begin, then use 'Next' to step through the algorithm" :
+                "Use 'Next' and 'Previous' buttons to navigate through the sorting steps"
+              }
+            </div>
+
             {/* Controls - Only show when array exists */}
             <div className="flex flex-wrap justify-center gap-4">
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 transform hover:scale-105"
-              >
-                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                {isPlaying ? 'Pause' : 'Play'}
-              </button>
+              {!sortingStarted ? (
+                <button
+                  onClick={handleStartSort}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 transform hover:scale-105"
+                >
+                  <Play size={20} />
+                  Start Sort
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handlePrevious}
+                    disabled={currentStepIndex === 0}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft size={20} />
+                    Previous
+                  </button>
+                  
+                  <button
+                    onClick={handleNext}
+                    disabled={currentStepIndex === steps.length - 1}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
+                  >
+                    Next
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
               
               <button
-                onClick={() => setCurrentStepIndex((idx) => Math.max(idx - 1, 0))}
-                disabled={currentStepIndex === 0}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
-              >
-                <ChevronLeft size={20} />
-                Previous
-              </button>
-              
-              <button
-                onClick={() => setCurrentStepIndex((idx) => Math.min(idx + 1, steps.length - 1))}
-                disabled={currentStepIndex === steps.length - 1}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
-              >
-                Next
-                <ChevronRight size={20} />
-              </button>
-              
-              <button
-                onClick={() => {
-                  setCurrentStepIndex(0);
-                  setIsPlaying(false);
-                }}
+                onClick={handleReset}
                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-500 to-slate-500 text-white font-semibold rounded-xl hover:from-gray-600 hover:to-slate-600 transition-all duration-200 transform hover:scale-105"
               >
                 <RotateCcw size={20} />

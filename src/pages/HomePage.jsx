@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowRightLeft, MoveUp } from 'lucide-react';
+import { ArrowRightLeft, MoveUp, Search } from 'lucide-react';
 
 export default function HomePage() {
   console.log('HomePage is rendering');
@@ -17,6 +17,7 @@ export default function HomePage() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl">
+        {/* Bubble Sort */}
         <div 
           className="group relative bg-gradient-to-br from-blue-800/50 to-indigo-800/50 backdrop-blur-sm border border-blue-400/20 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:border-blue-400/40"
           onClick={() => navigate('/bubble-sort')}
@@ -27,14 +28,13 @@ export default function HomePage() {
             <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <ArrowRightLeft />
             </div>
-            
             <h2 className="text-2xl font-semibold text-white mb-2">
               Bubble Sort
             </h2>
           </div>
-
         </div>
 
+        {/* Insertion Sort */}
         <div 
           className="group relative bg-gradient-to-br from-purple-800/50 to-pink-800/50 backdrop-blur-sm border border-purple-400/20 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:border-purple-400/40"
           onClick={() => navigate('/insertion-sort')}
@@ -45,12 +45,27 @@ export default function HomePage() {
             <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                 <MoveUp />
             </div>
-            
             <h2 className="text-2xl font-semibold text-white mb-2">
               Insertion Sort
             </h2>
           </div>
+        </div>
 
+        {/* Linear Search */}
+        <div 
+          className="group relative bg-gradient-to-br from-green-800/50 to-emerald-800/50 backdrop-blur-sm border border-green-400/20 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 hover:border-green-400/40"
+          onClick={() => navigate('/linear-search')}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-green-600/10 to-transparent rounded-2xl opacity-0"></div>
+          
+          <div className="relative z-10 text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-400 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Search />
+            </div>
+            <h2 className="text-2xl font-semibold text-white mb-2">
+              Linear Search
+            </h2>
+          </div>
         </div>
       </div>
     </div>
